@@ -1,4 +1,3 @@
-const form = document.getElementById('form')
 
 form.addEventListener('submit', (e) => {
     event.preventDefault()
@@ -7,19 +6,17 @@ form.addEventListener('submit', (e) => {
      xhr.open('POST', `https://students.netoservices.ru/nestjs-backend/upload`, true)
 
      let file = document.getElementById('file')
-     let formData = new FormData()
-     formData.append('file', file.value)
-    
+   
+     xhr.upload.onprogress = function(event) {
+         const progress = document.getElementById('progress')
+         
+         const percent = event.loaded / event.total 
+         progress.value = percent
+     };
      
-    xhr.onreadystatechange = function(){
-    
-     
-        console.log(xhr.readyState)
+    xhr.upload.onload = function() {
+          alert(`Файл успешно загружен`);
+    };
 
-        const progress = document.getElementById('progress')
-        if (progress.value != 1.0){
-           progress.value = xhr.readyState * 0.25
-     }
-}
-    xhr.send(formData) 
+    xhr.send(file.files[0]) 
 })
